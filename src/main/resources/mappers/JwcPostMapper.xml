@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whirly.dao.JwcPostMapper">
+	<resultMap id="BaseResultMap" type="com.whirly.model.JwcPost">
+		<id column="jwcpost_id" jdbcType="INTEGER" property="jwcpostId" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+		<result column="remarks" jdbcType="VARCHAR" property="remarks" />
+		<result column="crawltime" jdbcType="TIMESTAMP" property="crawltime" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+		type="com.whirly.model.JwcPost">
+		<result column="content" jdbcType="LONGVARCHAR" property="content" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		jwcpost_id, title, url, createtime, remarks, crawltime
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" parameterType="com.whirly.model.JwcPostExample"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from jwcpost
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" parameterType="com.whirly.model.JwcPostExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from jwcpost
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="ResultMapWithBLOBs">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from jwcpost
+		where jwcpost_id = #{jwcpostId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		jwcpost
+		where jwcpost_id = #{jwcpostId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.whirly.model.JwcPostExample">
+		delete from jwcpost
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.whirly.model.JwcPost">
+		insert into jwcpost
+		(jwcpost_id, title, url,
+		createtime, remarks, crawltime,
+		content)
+		values
+		(#{jwcpostId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+		#{url,jdbcType=VARCHAR},
+		#{createtime,jdbcType=TIMESTAMP},
+		#{remarks,jdbcType=VARCHAR}, #{crawltime,jdbcType=TIMESTAMP},
+		#{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.whirly.model.JwcPost">
+		insert into jwcpost
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="jwcpostId != null">
+				jwcpost_id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="url != null">
+				url,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+			<if test="remarks != null">
+				remarks,
+			</if>
+			<if test="crawltime != null">
+				crawltime,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="jwcpostId != null">
+				#{jwcpostId,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remarks != null">
+				#{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="crawltime != null">
+				#{crawltime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.whirly.model.JwcPostExample"
+		resultType="java.lang.Long">
+		select count(*) from jwcpost
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update jwcpost
+		<set>
+			<if test="record.jwcpostId != null">
+				jwcpost_id = #{record.jwcpostId,jdbcType=INTEGER},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.url != null">
+				url = #{record.url,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createtime != null">
+				createtime = #{record.createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.remarks != null">
+				remarks = #{record.remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="record.crawltime != null">
+				crawltime = #{record.crawltime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update jwcpost
+		set jwcpost_id = #{record.jwcpostId,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		url =
+		#{record.url,jdbcType=VARCHAR},
+		createtime =
+		#{record.createtime,jdbcType=TIMESTAMP},
+		remarks =
+		#{record.remarks,jdbcType=VARCHAR},
+		crawltime =
+		#{record.crawltime,jdbcType=TIMESTAMP},
+		content =
+		#{record.content,jdbcType=LONGVARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update jwcpost
+		set jwcpost_id = #{record.jwcpostId,jdbcType=INTEGER},
+		title = #{record.title,jdbcType=VARCHAR},
+		url =
+		#{record.url,jdbcType=VARCHAR},
+		createtime =
+		#{record.createtime,jdbcType=TIMESTAMP},
+		remarks =
+		#{record.remarks,jdbcType=VARCHAR},
+		crawltime =
+		#{record.crawltime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.whirly.model.JwcPost">
+		update jwcpost
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				url = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="remarks != null">
+				remarks = #{remarks,jdbcType=VARCHAR},
+			</if>
+			<if test="crawltime != null">
+				crawltime = #{crawltime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where jwcpost_id = #{jwcpostId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.whirly.model.JwcPost">
+		update
+		jwcpost
+		set title = #{title,jdbcType=VARCHAR},
+		url =
+		#{url,jdbcType=VARCHAR},
+		createtime = #{createtime,jdbcType=TIMESTAMP},
+		remarks = #{remarks,jdbcType=VARCHAR},
+		crawltime =
+		#{crawltime,jdbcType=TIMESTAMP},
+		content =
+		#{content,jdbcType=LONGVARCHAR}
+		where jwcpost_id =
+		#{jwcpostId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.whirly.model.JwcPost">
+		update jwcpost
+		set
+		title = #{title,jdbcType=VARCHAR},
+		url = #{url,jdbcType=VARCHAR},
+		createtime = #{createtime,jdbcType=TIMESTAMP},
+		remarks =
+		#{remarks,jdbcType=VARCHAR},
+		crawltime =
+		#{crawltime,jdbcType=TIMESTAMP}
+		where jwcpost_id =
+		#{jwcpostId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByExampleWithBLOBsWithRowbounds"
+		parameterType="com.whirly.model.JwcPostExample" resultMap="ResultMapWithBLOBs">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from jwcpost
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExampleWithRowbounds" parameterType="com.whirly.model.JwcPostExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from jwcpost
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectAllType" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select distinct remarks
+		from jwcpost
+	</select>
+	<select id="selectBySearchForm" parameterType="com.whirly.form.JwcForm"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from jwcpost where 1=1
+		<if test="q != null">
+			and title like #{q,jdbcType=VARCHAR}
+		</if>
+		<if test="type != null">
+			and remarks = #{type,jdbcType=VARCHAR}
+		</if>
+		order by crawltime desc
+	</select>
+</mapper>

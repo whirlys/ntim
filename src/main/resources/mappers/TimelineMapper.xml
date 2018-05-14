@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whirly.dao.TimelineMapper">
+	<resultMap id="BaseResultMap" type="com.whirly.model.Timeline">
+		<id column="timeline_id" jdbcType="INTEGER" property="timelineId" />
+		<result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="is_read" jdbcType="BIT" property="isRead" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+	</resultMap>
+
+
+	<resultMap id="IsReadNumMap" type="com.whirly.vo.NoticeIsReadVo">
+		<result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+		<result column="is_read" jdbcType="BIT" property="isRead" />
+		<result column="num" jdbcType="TIMESTAMP" property="num" />
+	</resultMap>
+
+	<!-- 统计没有阅读通知的数量最多的学生 -->
+	<resultMap id="NoReadStudentVO" type="com.whirly.vo.NoReadTopNSVO">
+		<result column="student_id" jdbcType="INTEGER" property="studentId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="profession" jdbcType="VARCHAR" property="profession" />
+		<result column="grade" jdbcType="INTEGER" property="grade" />
+		<result column="class_number" jdbcType="INTEGER" property="classNumber" />
+		<result column="account" jdbcType="VARCHAR" property="account" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<result column="name" jdbcType="VARCHAR" property="departmentName" />
+		<result column="count" jdbcType="INTEGER" property="count" />
+	</resultMap>
+
+	<!-- 统计班级的未读通知的数量 -->
+	<resultMap id="NoReadClassVOMap" type="com.whirly.vo.NoReadTopNCVO">
+		<result column="class_id" jdbcType="INTEGER" property="classId" />
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="profession" jdbcType="VARCHAR" property="profession" />
+		<result column="grade" jdbcType="INTEGER" property="grade" />
+		<result column="class_number" jdbcType="INTEGER" property="classNumber" />
+		<result column="name" jdbcType="VARCHAR" property="departmentName" />
+		<result column="count" jdbcType="INTEGER" property="count" />
+		<result column="studentNum" jdbcType="INTEGER" property="studentNum" />
+	</resultMap>
+
+	<resultMap id="NoticeUserVOResultMap" type="com.whirly.vo.NoticeUserVO">
+		<id column="timeline_id" jdbcType="INTEGER" property="timelineId" />
+		<result column="is_read" jdbcType="BIT" property="isRead" />
+
+		<result column="sender_user_id" jdbcType="VARCHAR" property="senderUserId" />
+		<result column="sender_username" jdbcType="VARCHAR" property="senderUsername" />
+
+		<result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+		<result column="title" jdbcType="VARCHAR" property="title" />
+		<result column="lever" jdbcType="SMALLINT" property="lever" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+		<result column="publicer" jdbcType="VARCHAR" property="publicer" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="content" jdbcType="LONGVARCHAR" property="content" />
+	</resultMap>
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		timeline_id, notice_id, user_id, is_read, createtime
+	</sql>
+	<select id="selectByExample" parameterType="com.whirly.model.TimelineExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from timeline
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from timeline
+		where timeline_id = #{timelineId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		timeline
+		where timeline_id = #{timelineId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.whirly.model.TimelineExample">
+		delete from timeline
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.whirly.model.Timeline">
+		insert into timeline
+		(timeline_id, notice_id, user_id,
+		is_read, createtime)
+		values
+		(#{timelineId,jdbcType=INTEGER}, #{noticeId,jdbcType=INTEGER},
+		#{userId,jdbcType=INTEGER},
+		#{isRead,jdbcType=BIT},
+		#{createtime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.whirly.model.Timeline">
+		insert into timeline
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="timelineId != null">
+				timeline_id,
+			</if>
+			<if test="noticeId != null">
+				notice_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="isRead != null">
+				is_read,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="timelineId != null">
+				#{timelineId,jdbcType=INTEGER},
+			</if>
+			<if test="noticeId != null">
+				#{noticeId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="isRead != null">
+				#{isRead,jdbcType=BIT},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<!-- 批量插入 -->
+	<insert id="batchInsert" parameterType="com.whirly.model.Timeline"
+		useGeneratedKeys="true" keyProperty="timelineId">
+		insert into timeline ( notice_id, user_id,
+		is_read)
+		values
+		<foreach collection="list" item="timeline" index="index"
+			separator=",">
+			( #{timeline.noticeId,jdbcType=INTEGER},
+			#{timeline.userId,jdbcType=INTEGER},
+			#{timeline.isRead,jdbcType=BIT})
+		</foreach>
+	</insert>
+	<select id="countByExample" parameterType="com.whirly.model.TimelineExample"
+		resultType="java.lang.Long">
+		select count(*) from timeline
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update timeline
+		<set>
+			<if test="record.timelineId != null">
+				timeline_id = #{record.timelineId,jdbcType=INTEGER},
+			</if>
+			<if test="record.noticeId != null">
+				notice_id = #{record.noticeId,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=INTEGER},
+			</if>
+			<if test="record.isRead != null">
+				is_read = #{record.isRead,jdbcType=BIT},
+			</if>
+			<if test="record.createtime != null">
+				createtime = #{record.createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update timeline
+		set timeline_id =
+		#{record.timelineId,jdbcType=INTEGER},
+		notice_id =
+		#{record.noticeId,jdbcType=INTEGER},
+		user_id =
+		#{record.userId,jdbcType=INTEGER},
+		is_read =
+		#{record.isRead,jdbcType=BIT},
+		createtime =
+		#{record.createtime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.whirly.model.Timeline">
+		update timeline
+		<set>
+			<if test="noticeId != null">
+				notice_id = #{noticeId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="isRead != null">
+				is_read = #{isRead,jdbcType=BIT},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where timeline_id = #{timelineId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.whirly.model.Timeline">
+		update timeline
+		set notice_id = #{noticeId,jdbcType=INTEGER},
+		user_id =
+		#{userId,jdbcType=INTEGER},
+		is_read = #{isRead,jdbcType=BIT},
+		createtime = #{createtime,jdbcType=TIMESTAMP}
+		where timeline_id =
+		#{timelineId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByExampleWithRowbounds" parameterType="com.whirly.model.TimelineExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from timeline
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectIsReadNumByNoticeId" parameterType="java.lang.Integer"
+		resultMap="IsReadNumMap">
+		select notice_id,is_read,count(*) as num
+		from timeline t
+		where
+		t.notice_id = #{noticeId,jdbcType=INTEGER} group by is_read
+	</select>
+	<select id="selectBySearchForm" parameterType="com.whirly.form.NoticeSearchForm"
+		resultMap="NoticeUserVOResultMap">
+		select
+		timeline_id,is_read, u.user_id as sender_user_id,
+		u.username as
+		sender_username,n.notice_id,title,
+		lever, n.createtime,
+		publicer,
+		type,content
+		from timeline t join notice n join user u
+		where
+		t.notice_id
+		= n.notice_id and n.user_id = u.user_id
+		<if test="lever != null">
+			and lever = #{lever,jdbcType=SMALLINT}
+		</if>
+		<if test="type != null">
+			and n.type = #{type,jdbcType=VARCHAR}
+		</if>
+		<if test="q != null">
+			and (title like #{q,jdbcType=VARCHAR} or content like
+			#{q,jdbcType=VARCHAR})
+		</if>
+		<if test="senderId != null">
+			and n.user_id = #{senderId,jdbcType=INTEGER}
+		</if>
+		and t.user_id =
+		#{userId,jdbcType=INTEGER}
+		order by t.createtime desc
+	</select>
+	<select id="selectNoticeBySearchForm" parameterType="java.lang.Integer"
+		resultMap="NoticeUserVOResultMap">
+		select
+		timeline_id,is_read, u.user_id as sender_user_id,
+		u.username as
+		sender_username,n.notice_id,title,
+		lever, n.createtime,
+		publicer,
+		type,content
+		from timeline t join notice n join user u
+		where
+		t.notice_id
+		= n.notice_id and n.user_id = u.user_id
+		and t.user_id =
+		#{userId,jdbcType=INTEGER}
+		and t.timeline_id =
+		#{timelineId,jdbcType=INTEGER}
+		order by t.createtime desc
+	</select>
+	<select id="noReadedTopNStudent" parameterType="java.lang.Integer"
+		resultMap="NoReadStudentVO">
+		select count(*) as
+		count,s.student_id,t.user_id,d.department_id,c.profession,c.grade,c.class_number,u.account,u.username,d.`name`
+		from timeline t join `user` u join student s join class c join
+		department d
+
+		where t.user_id = u.user_id and u.user_id = s.user_id and
+		s.class_id =
+		c.class_id and c.department_id = d.department_id and
+		t.is_read = FALSE
+		group by t.user_id HAVING count > 0 ORDER BY count
+		desc limit #{limit, jdbcType=INTEGER}
+	</select>
+	<select id="noReadedTopNClass" resultMap="NoReadClassVOMap">
+		select count(*) as
+		count,c.class_id,
+		d.department_id,c.profession,c.grade,c.class_number,d.`name`,count(DISTINCT(s.student_id))
+		as studentNum
+		from timeline t join `user` u join student s join class c
+		join
+		department d
+
+		where t.user_id = u.user_id and u.user_id = s.user_id
+		and
+		s.class_id =
+		c.class_id and c.department_id = d.department_id and
+		t.is_read = FALSE
+		group by c.class_id HAVING count > 0
+	</select>
+</mapper>

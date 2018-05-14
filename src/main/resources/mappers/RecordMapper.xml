@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whirly.dao.RecordMapper">
+	<resultMap id="BaseResultMap" type="com.whirly.model.Record">
+		<id column="record_id" jdbcType="INTEGER" property="recordId" />
+		<result column="form_id" jdbcType="INTEGER" property="formId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="value" jdbcType="CHAR" property="value" />
+		<result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+		<result column="filled" jdbcType="BIT" property="filled" />
+	</resultMap>
+	<!-- record VO -->
+	<resultMap id="VOResultMap" type="com.whirly.vo.RecordVO">
+		<id column="record_id" jdbcType="INTEGER" property="recordId" />
+		<result column="form_id" jdbcType="INTEGER" property="formId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="value" jdbcType="CHAR" property="value" />
+		<result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+		<result column="filled" jdbcType="BIT" property="filled" />
+		<result column="class_id" jdbcType="INTEGER" property="classId" />
+		<result column="account" jdbcType="VARCHAR" property="account" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<association property="classs" column="class_id"
+			select="com.whirly.dao.ClasssMapper.selectByPrimaryKey" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		record_id, form_id, user_id, value, updatetime, filled
+	</sql>
+	<select id="selectByExample" parameterType="com.whirly.model.RecordExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from record
+		where record_id = #{recordId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from record
+		where record_id = #{recordId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.whirly.model.RecordExample">
+		delete from record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.whirly.model.Record">
+		insert into record (form_id,
+		user_id,
+		value, filled
+		)
+		values
+		( #{formId,jdbcType=INTEGER},
+		#{userId,jdbcType=INTEGER},
+		#{value,jdbcType=CHAR},
+		#{filled,jdbcType=BIT}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.whirly.model.Record">
+		insert into record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="recordId != null">
+				record_id,
+			</if>
+			<if test="formId != null">
+				form_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="value != null">
+				value,
+			</if>
+			<if test="updatetime != null">
+				updatetime,
+			</if>
+			<if test="filled != null">
+				filled,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="recordId != null">
+				#{recordId,jdbcType=INTEGER},
+			</if>
+			<if test="formId != null">
+				#{formId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="value != null">
+				#{value,jdbcType=CHAR},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="filled != null">
+				#{filled,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.whirly.model.RecordExample"
+		resultType="java.lang.Long">
+		select count(*) from record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update record
+		<set>
+			<if test="record.recordId != null">
+				record_id = #{record.recordId,jdbcType=INTEGER},
+			</if>
+			<if test="record.formId != null">
+				form_id = #{record.formId,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=INTEGER},
+			</if>
+			<if test="record.value != null">
+				value = #{record.value,jdbcType=CHAR},
+			</if>
+			<if test="record.updatetime != null">
+				updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.filled != null">
+				filled = #{record.filled,jdbcType=BIT},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update record
+		set record_id = #{record.recordId,jdbcType=INTEGER},
+		form_id = #{record.formId,jdbcType=INTEGER},
+		user_id =
+		#{record.userId,jdbcType=INTEGER},
+		value =
+		#{record.value,jdbcType=CHAR},
+		updatetime =
+		#{record.updatetime,jdbcType=TIMESTAMP},
+		filled =
+		#{record.filled,jdbcType=BIT}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.whirly.model.Record">
+		update record
+		<set>
+			<if test="formId != null">
+				form_id = #{formId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="value != null">
+				value = #{value,jdbcType=CHAR},
+			</if>
+			<if test="updatetime != null">
+				updatetime = #{updatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="filled != null">
+				filled = #{filled,jdbcType=BIT},
+			</if>
+		</set>
+		where record_id = #{recordId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.whirly.model.Record">
+		update record
+		set
+		form_id = #{formId,jdbcType=INTEGER},
+		user_id =
+		#{userId,jdbcType=INTEGER},
+		value = #{value,jdbcType=CHAR},
+		updatetime =
+		#{updatetime,jdbcType=TIMESTAMP},
+		filled = #{filled,jdbcType=BIT}
+		where
+		record_id = #{recordId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByExampleWithRowbounds" parameterType="com.whirly.model.RecordExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from record
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<!-- 根据 userId和formId查询 -->
+	<select id="selectByDto" parameterType="com.whirly.dto.RecordParamDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from record
+		where form_id = #{formId,jdbcType=INTEGER} and
+		user_id =
+		#{userId,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据 userId和formId查询 -->
+	<select id="selectByFormId" parameterType="java.lang.Integer"
+		resultMap="VOResultMap">
+		select
+		record_id,form_id,r.user_id,value,updatetime,filled,class_id,account,username
+
+		from record r join user u join student s
+		where r.user_id = u.user_id
+		and u.user_id = s.user_id and
+		form_id = #{formId,jdbcType=INTEGER}
+		and
+		filled = true
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List"
+		useGeneratedKeys="true" keyProperty="recordId">
+		insert into record (form_id,
+		user_id,
+		value, filled
+		)
+		values
+		<foreach collection="list" item="record" index="index"
+			separator=",">
+
+			(
+			#{record.formId,jdbcType=INTEGER},
+			#{record.userId,jdbcType=INTEGER},
+			#{record.value,jdbcType=CHAR},
+			#{record.filled,jdbcType=BIT}
+			)
+		</foreach>
+	</insert>
+</mapper>

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whirly.dao.DepartmentMapper">
+	<resultMap id="BaseResultMap" type="com.whirly.model.Department">
+		<id column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+		<result column="remark" jdbcType="VARCHAR" property="remark" />
+		<result column="is_active" jdbcType="BIT" property="isActive" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+	</resultMap>
+	<resultMap id="DepartmentUserVO" type="com.whirly.vo.chart.DepartmentUserVO">
+		<id column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="name" jdbcType="VARCHAR" property="departmentName" />
+		<result column="count" jdbcType="INTEGER" property="count" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		department_id, name, parent_id, remark, is_active,
+		createtime
+	</sql>
+	<select id="selectByExample" parameterType="com.whirly.model.DepartmentExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from department
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from department
+		where department_id = #{departmentId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		department
+		where department_id = #{departmentId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.whirly.model.DepartmentExample">
+		delete from department
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.whirly.model.Department">
+		insert into department
+		(department_id, name, parent_id,
+		remark, is_active, createtime
+		)
+		values
+		(#{departmentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{parentId,jdbcType=INTEGER},
+		#{remark,jdbcType=VARCHAR},
+		#{isActive,jdbcType=BIT}, #{createtime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.whirly.model.Department">
+		insert into department
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="departmentId != null">
+				department_id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="isActive != null">
+				is_active,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="departmentId != null">
+				#{departmentId,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isActive != null">
+				#{isActive,jdbcType=BIT},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.whirly.model.DepartmentExample"
+		resultType="java.lang.Long">
+		select count(*) from department
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update department
+		<set>
+			<if test="record.departmentId != null">
+				department_id = #{record.departmentId,jdbcType=INTEGER},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=INTEGER},
+			</if>
+			<if test="record.remark != null">
+				remark = #{record.remark,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isActive != null">
+				is_active = #{record.isActive,jdbcType=BIT},
+			</if>
+			<if test="record.createtime != null">
+				createtime = #{record.createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update department
+		set department_id =
+		#{record.departmentId,jdbcType=INTEGER},
+		name =
+		#{record.name,jdbcType=VARCHAR},
+		parent_id =
+		#{record.parentId,jdbcType=INTEGER},
+		remark =
+		#{record.remark,jdbcType=VARCHAR},
+		is_active =
+		#{record.isActive,jdbcType=BIT},
+		createtime =
+		#{record.createtime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.whirly.model.Department">
+		update department
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="isActive != null">
+				is_active = #{isActive,jdbcType=BIT},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where department_id = #{departmentId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.whirly.model.Department">
+		update department
+		set name = #{name,jdbcType=VARCHAR},
+		parent_id =
+		#{parentId,jdbcType=INTEGER},
+		remark = #{remark,jdbcType=VARCHAR},
+		is_active = #{isActive,jdbcType=BIT},
+		createtime =
+		#{createtime,jdbcType=TIMESTAMP}
+		where department_id =
+		#{departmentId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByExampleWithRowbounds" parameterType="com.whirly.model.DepartmentExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from department
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<select id="selectByClassId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from department where department_id in
+		(
+		select department_id from class
+		where class_id = #{classId,jdbcType=INTEGER}
+		)
+	</select>
+	<select id="countUsers" resultMap="DepartmentUserVO">
+		select count, name,
+		d.department_id from
+		department d join
+		(select count(*) as count,
+		department_id from student s join class c on
+		s.class_id = c.class_id
+		GROUP BY department_id) as sc where
+		sc.department_id = d.department_id
+		order by count desc
+	</select>
+	<select id="countPublicers" resultMap="DepartmentUserVO">
+	select count(*) as count, name,
+		d.department_id from
+		department d  join
+		publicer p on d.department_id = p.deparment_id
+		GROUP BY p.deparment_id
+	</select>
+</mapper>

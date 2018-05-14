@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whirly.dao.BeManagedMapper">
+	<resultMap id="BaseResultMap" type="com.whirly.model.BeManaged">
+		<id column="managed_id" jdbcType="INTEGER" property="managedId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="class_id" jdbcType="INTEGER" property="classId" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+	</resultMap>
+	<resultMap id="BaseResultMapVO" type="com.whirly.vo.BeManagedVO">
+		<id column="managed_id" jdbcType="INTEGER" property="managedId" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="class_id" jdbcType="INTEGER" property="classId" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+		<result column="department_id" jdbcType="INTEGER" property="departmentId" />
+		<result column="profession" jdbcType="VARCHAR" property="profession" />
+		<result column="grade" jdbcType="INTEGER" property="grade" />
+		<result column="class_number" jdbcType="INTEGER" property="classNumber" />
+
+		<result column="name" jdbcType="VARCHAR" property="departmentName" />
+
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		managed_id, user_id, class_id, createtime
+	</sql>
+	<select id="selectByExample" parameterType="com.whirly.model.BeManagedExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from managed
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from managed
+		where managed_id = #{managedId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		managed
+		where managed_id = #{managedId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.whirly.model.BeManagedExample">
+		delete from managed
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteByList" parameterType="com.whirly.model.BeManaged">
+		DELETE FROM
+		managed
+		WHERE
+		<foreach item="beManaged" index="index" collection="list"
+			open="(" close=")" separator="OR">
+			(user_id =
+			#{beManaged.userId,jdbcType=INTEGER} and
+			class_id =
+			#{beManaged.classId,jdbcType=INTEGER})
+		</foreach>
+	</delete>
+	<insert id="insert" parameterType="com.whirly.model.BeManaged">
+		insert into managed
+		(managed_id, user_id, class_id,
+		createtime)
+		values
+		(#{managedId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER},
+		#{classId,jdbcType=INTEGER},
+		#{createtime,jdbcType=TIMESTAMP})
+	</insert>
+	<insert id="insertSelective" parameterType="com.whirly.model.BeManaged">
+		insert into managed
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="managedId != null">
+				managed_id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="classId != null">
+				class_id,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="managedId != null">
+				#{managedId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="classId != null">
+				#{classId,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 批量插入 -->
+	<insert id="insertByList" parameterType="java.util.List">
+		insert into managed
+		(user_id, class_id,
+		createtime)
+		values
+		<foreach collection="list" item="beManaged" index="index"
+			separator=",">
+			(#{beManaged.userId,jdbcType=INTEGER},
+			#{beManaged.classId,jdbcType=INTEGER},
+			#{beManaged.createtime,jdbcType=TIMESTAMP})
+		</foreach>
+	</insert>
+	<select id="countByExample" parameterType="com.whirly.model.BeManagedExample"
+		resultType="java.lang.Long">
+		select count(*) from managed
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update managed
+		<set>
+			<if test="record.managedId != null">
+				managed_id = #{record.managedId,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=INTEGER},
+			</if>
+			<if test="record.classId != null">
+				class_id = #{record.classId,jdbcType=INTEGER},
+			</if>
+			<if test="record.createtime != null">
+				createtime = #{record.createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update managed
+		set managed_id = #{record.managedId,jdbcType=INTEGER},
+		user_id = #{record.userId,jdbcType=INTEGER},
+		class_id =
+		#{record.classId,jdbcType=INTEGER},
+		createtime =
+		#{record.createtime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.whirly.model.BeManaged">
+		update managed
+		<set>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="classId != null">
+				class_id = #{classId,jdbcType=INTEGER},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where managed_id = #{managedId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.whirly.model.BeManaged">
+		update managed
+		set
+		user_id = #{userId,jdbcType=INTEGER},
+		class_id =
+		#{classId,jdbcType=INTEGER},
+		createtime =
+		#{createtime,jdbcType=TIMESTAMP}
+		where managed_id =
+		#{managedId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByExampleWithRowbounds" parameterType="com.whirly.model.BeManagedExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from managed
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<!-- 选出已被管理的班级 -->
+	<select id="selectManaged" parameterType="java.lang.Integer"
+		resultMap="BaseResultMapVO">
+		select m.managed_id, m.user_id, m.class_id, m.createtime,
+		c.department_id, c.profession,
+		c.grade, c.class_number, d.name
+		from
+		class c, managed m, department d
+		where m.class_id = c.class_id and
+		c.department_id = d.department_id
+		and m.user_id =
+		#{publicerId,jdbcType=INTEGER}
+		order by c.grade desc,c.profession
+		asc,c.class_number asc
+	</select>
+	<!-- 选出同一学院内未被管理的班级 -->
+	<!-- select m2.managed_id, m2.user_id,m2.createtime,a.class_id,a.department_id, 
+		a.profession, a.grade, a.class_number from managed m2 join ( select c.class_id,c.class_number,c.profession,c.grade,c.department_id 
+		from class c where c.class_id not in (select m.class_id from managed m where 
+		m.user_id = 1) and c.department_id = 13 ) a -->
+	<select id="selectNotManaged" parameterType="java.lang.Integer"
+		resultMap="BaseResultMapVO">
+		select
+		c.class_id,c.class_number,c.profession,c.grade,c.department_id ,d.name
+		from
+		class c join department d on c.department_id = d.department_id
+		where
+		c.class_id not in (select m.class_id from managed m where
+		m.user_id = #{publicerId,jdbcType=INTEGER})
+		and c.department_id =
+		(select deparment_id from publicer where
+		publicer_id =
+		#{publicerId,jdbcType=INTEGER} )
+		order by c.grade desc,c.profession asc,c.class_number asc
+	</select>
+	<select id="selectClassIdByUserId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select class_id from managed where user_id =
+		#{publicerId,jdbcType=INTEGER}
+	</select>
+</mapper>

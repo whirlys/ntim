@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" 
+"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<context id="tables">
+		<!-- RowBounds pagination -->
+		<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" />
+		<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin" />
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+
+		<commentGenerator>
+			<property name="suppressDate" value="true" />
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<!-- jdbc连接 -->
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://127.0.0.1:3306/ntim?characterEncoding=utf8"
+			userId="root" password="123456" />
+
+		<javaModelGenerator targetPackage="com.whirly.model"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<!-- 是否针对string类型的字段在set的时候进行trim调用 -->
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<sqlMapGenerator targetPackage="mappers"
+			targetProject="src/main/resources">
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+		<javaClientGenerator targetPackage="com.whirly.dao"
+			targetProject="src/main/java" type="XMLMAPPER">
+			<property name="enableSubPackages" value="true" />
+		</javaClientGenerator>
+
+		<!-- <table tableName="user" domainObjectName="User"> <property name="useActualColumnNames" 
+			value="false" /> </table> <table tableName="class" domainObjectName="Classs"> 
+			<property name="useActualColumnNames" value="false" /> </table> <table tableName="department" 
+			domainObjectName="Department"> <property name="useActualColumnNames" value="false" 
+			/> </table> <table tableName="group" domainObjectName="Group"> <property 
+			name="useActualColumnNames" value="false" /> </table> <table tableName="managed" 
+			domainObjectName="BeManaged"> <property name="useActualColumnNames" value="false" 
+			/> </table> <table tableName="member" domainObjectName="Member"> <property 
+			name="useActualColumnNames" value="false" /> </table> <table tableName="message" 
+			domainObjectName="Message"> <property name="useActualColumnNames" value="false" 
+			/> </table> -->
+		<!-- <table tableName="notice" domainObjectName="Notice"> <property name="useActualColumnNames" 
+			value="false" /> </table> -->
+		<!-- <table tableName="student" domainObjectName="Student"> <property name="useActualColumnNames" 
+			value="false" /> </table> <table tableName="supplement" domainObjectName="Supplement"> 
+			<property name="useActualColumnNames" value="false" /></table> -->
+		<!-- <table tableName="publicer" domainObjectName="Publicer"> <property 
+			name="useActualColumnNames" value="false" /> </table> -->
+
+		<!-- <table tableName="timeline" domainObjectName="Timeline"> <property 
+			name="useActualColumnNames" value="false" /> </table> -->
+
+		<!-- <table tableName="form" domainObjectName="Form"> <property name="useActualColumnNames" 
+			value="false" /> </table> <table tableName="record" domainObjectName="Record"> 
+			<property name="useActualColumnNames" value="false" /> </table> <table tableName="field" 
+			domainObjectName="Field"> <property name="useActualColumnNames" value="false" 
+			/> </table> -->
+		<!-- <table tableName="file" domainObjectName="File"> <property name="useActualColumnNames" 
+			value="false" /> </table> -->
+		<!-- <table tableName="question" domainObjectName="Question"> <property 
+			name="useActualColumnNames" value="false" /> </table> <table tableName="answer" 
+			domainObjectName="Answer"> <property name="useActualColumnNames" value="false" 
+			/> </table> -->
+		<table tableName="jwcpost" domainObjectName="JwcPost">
+			<property name="useActualColumnNames" value="false" />
+		</table>
+	</context>
+</generatorConfiguration>

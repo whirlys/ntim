@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.whirly.dao.FormMapper">
+	<resultMap id="BaseResultMap" type="com.whirly.model.Form">
+		<id column="form_id" jdbcType="INTEGER" property="formId" />
+		<result column="form_name" jdbcType="VARCHAR" property="formName" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+		<result column="user_id" jdbcType="INTEGER" property="userId" />
+		<result column="receivers" jdbcType="CHAR" property="receivers" />
+		<result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+
+		<collection property="fields" column="form_id"
+			ofType="com.whirly.model.Field" select="com.whirly.dao.FieldMapper.selectByFormId" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value" item="listItem"
+										open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		form_id, form_name, description, deadline, user_id,
+		receivers, createtime
+	</sql>
+	<select id="selectByExample" parameterType="com.whirly.model.FormExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from form
+		where form_id = #{formId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from form
+		where form_id = #{formId,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.whirly.model.FormExample">
+		delete from form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.whirly.model.Form"
+		useGeneratedKeys="true" keyProperty="formId">
+		insert into form (form_id,
+		form_name, description,
+		deadline, user_id, receivers)
+		values
+		(#{formId,jdbcType=INTEGER}, #{formName,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{deadline,jdbcType=TIMESTAMP},
+		#{userId,jdbcType=INTEGER}, #{receivers,jdbcType=CHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.whirly.model.Form">
+		insert into form
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="formId != null">
+				form_id,
+			</if>
+			<if test="formName != null">
+				form_name,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="deadline != null">
+				deadline,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="receivers != null">
+				receivers,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="formId != null">
+				#{formId,jdbcType=INTEGER},
+			</if>
+			<if test="formName != null">
+				#{formName,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="deadline != null">
+				#{deadline,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="receivers != null">
+				#{receivers,jdbcType=CHAR},
+			</if>
+			<if test="createtime != null">
+				#{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.whirly.model.FormExample"
+		resultType="java.lang.Long">
+		select count(*) from form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update form
+		<set>
+			<if test="record.formId != null">
+				form_id = #{record.formId,jdbcType=INTEGER},
+			</if>
+			<if test="record.formName != null">
+				form_name = #{record.formName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deadline != null">
+				deadline = #{record.deadline,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=INTEGER},
+			</if>
+			<if test="record.receivers != null">
+				receivers = #{record.receivers,jdbcType=CHAR},
+			</if>
+			<if test="record.createtime != null">
+				createtime = #{record.createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update form
+		set form_id = #{record.formId,jdbcType=INTEGER},
+		form_name =
+		#{record.formName,jdbcType=VARCHAR},
+		description =
+		#{record.description,jdbcType=VARCHAR},
+		deadline =
+		#{record.deadline,jdbcType=TIMESTAMP},
+		user_id =
+		#{record.userId,jdbcType=INTEGER},
+		receivers =
+		#{record.receivers,jdbcType=CHAR},
+		createtime =
+		#{record.createtime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.whirly.model.Form">
+		update form
+		<set>
+			<if test="formName != null">
+				form_name = #{formName,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="deadline != null">
+				deadline = #{deadline,jdbcType=TIMESTAMP},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="receivers != null">
+				receivers = #{receivers,jdbcType=CHAR},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where form_id = #{formId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.whirly.model.Form">
+		update form
+		set
+		form_name = #{formName,jdbcType=VARCHAR},
+		description =
+		#{description,jdbcType=VARCHAR},
+		deadline =
+		#{deadline,jdbcType=TIMESTAMP},
+		user_id = #{userId,jdbcType=INTEGER},
+		receivers = #{receivers,jdbcType=CHAR},
+		createtime =
+		#{createtime,jdbcType=TIMESTAMP}
+		where form_id =
+		#{formId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByExampleWithRowbounds" parameterType="com.whirly.model.FormExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from form
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+	<!-- 根据表单查询 -->
+	<select id="selectBySearchForm" parameterType="com.whirly.form.FormSearchForm"
+		resultMap="BaseResultMap">
+
+		select
+		<include refid="Base_Column_List" />
+		from form
+		where 1 = 1
+		<if test="userId != null">
+			and user_id = #{userId,jdbcType=INTEGER}
+		</if>
+		<if test="q != null">
+			and (form_name like #{q,jdbcType=VARCHAR} or description
+			like
+			#{q,jdbcType=VARCHAR})
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and <![CDATA[createtime >= to_date(#{startTime,jdbcType=DATE},'yyyy-MM-dd hh24:mi:ss')]]>
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and <![CDATA[createtime <= to_date(#{endTime,jdbcType=DATE},'yyyy-MM-dd hh24:mi:ss')]]>
+		</if>
+		order by createtime desc
+	</select>
+
+	<!-- 更新截止时间 -->
+	<update id="updateDeadline" parameterType="com.whirly.form.DelayForm">
+		update form set
+		deadline = #{deadline,jdbcType=TIMESTAMP}
+		where form_id =
+		#{formId,jdbcType=INTEGER}
+	</update>
+</mapper>
