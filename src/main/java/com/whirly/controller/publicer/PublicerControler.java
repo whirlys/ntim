@@ -20,6 +20,8 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -37,6 +39,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageInfo;
+import com.whirly.controller.student.StudentController;
 import com.whirly.enums.NoticeLever;
 import com.whirly.enums.NoticeType;
 import com.whirly.form.DelayForm;
@@ -81,6 +84,7 @@ import junit.framework.Test;
 @Controller
 @RequestMapping("publicer")
 public class PublicerControler {
+	private static final Logger logger = LoggerFactory.getLogger(PublicerControler.class);
 
 	@Autowired
 	private PushService pushService;
@@ -359,6 +363,18 @@ public class PublicerControler {
 			timelines.add(timeline);
 		}
 		status = timelineService.batchInsert(timelines);
+
+		// 推送
+		try {
+			String title = "来自 " + user.getUsername() + " 的表单通知";
+			PushMessageBody pushMessageBody = new PushMessageBody();
+			pushMessageBody.setTitle(notice.getTitle());
+			pushMessageBody.setSampleContent(formForm.getDescription().substring(0, 30) + "...");
+			List<Integer> toList = formForm.getReceivers();
+			pushService.pushTimeline(user.getUserId(), toList, title, pushMessageBody);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return Msg.success();
 	}
 
@@ -483,7 +499,7 @@ public class PublicerControler {
 					cell.setCellValue(value);
 				}
 				cellnum = cellnum + 1;
-				System.out.println(value);
+
 			}
 			rownum = rownum + 1;
 		}

@@ -30,9 +30,12 @@ public class PushServiceImpl implements PushService {
 			builder.setReceiver(to.toString());
 			MessageWrapper wrapper = new MessageWrapper(MessageWrapper.MessageProtocol.NOTIFY, from.toString(),
 					to.toString(), builder.build());
-			imConnector.pushMessage(from.toString(), wrapper);
+			try {
+				imConnector.pushMessage(from.toString(), wrapper);
+			} catch (Exception e) {
+				return 1;
+			}
 		}
-
 		return 0;
 	}
 

@@ -162,9 +162,9 @@
 					data : JSON.stringify(fields),
 					method : "post",
 					dataType : 'json',
-					contentType : 'application/json',
+					contentType : "application/json;charset=UTF-8",
 					success : function(data) {
-						if (data['code'] == 100) {
+						if (data['code'] == "100") {
 							layer.closeAll("iframe");
 							//刷新父页面
 							parent.location.reload();

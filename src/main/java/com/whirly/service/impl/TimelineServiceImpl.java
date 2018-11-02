@@ -80,9 +80,6 @@ public class TimelineServiceImpl implements TimelineService {
 
 		}
 		Collections.sort(clazz);
-		for (NoReadTopNCVO vo : clazz) {
-			System.out.println(vo.toString());
-		}
 		return clazz.subList(0, limit);
 	}
 

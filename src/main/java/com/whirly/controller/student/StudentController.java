@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.pagehelper.PageInfo;
 import com.whirly.dto.RecordParamDto;
+import com.whirly.exception.NotAllowException;
 import com.whirly.form.JwcForm;
 import com.whirly.form.NoticeSearchForm;
 import com.whirly.form.PasswordForm;
@@ -217,7 +218,15 @@ public class StudentController {
 	@RequestMapping(value = "form/{formId}", method = RequestMethod.GET)
 	public String form(Model model, HttpSession session, @PathVariable("formId") Integer formId) {
 		Student student = (Student) session.getAttribute("student");
+		if (null == student) {
+			logger.warn("student not in session, 不是学生用户");
+			throw new NotAllowException("不是学生！");
+		}
+
 		Form form = formService.selectById(formId);
+		if (null == form) {
+			logger.warn("form {} not exist!", formId);
+		}
 		RecordParamDto dto = new RecordParamDto();
 		dto.setFormId(formId);
 		dto.setUserId(student.getUserId());
@@ -243,11 +252,13 @@ public class StudentController {
 	@ResponseBody
 	public Msg formpost(HttpSession session, @PathVariable("formId") Integer formId, @RequestBody String value) {
 		Student student = (Student) session.getAttribute("student");
+		if (null == student) {
+			logger.warn("student not in session, 不是学生用户");
+			throw new NotAllowException("不是学生！");
+		}
 		Form form = formService.selectById(formId);
 		if (form.getDeadline().compareTo(new Date()) < 0) {
-			Msg msg = Msg.error();
-			msg.setMsg("已过期限！");
-			return msg;
+			return Msg.error("已过期限！");
 		}
 
 		RecordParamDto dto = new RecordParamDto();
@@ -255,14 +266,10 @@ public class StudentController {
 		dto.setUserId(student.getUserId());
 		Record record = recordService.selectByRecord(dto);
 		if (record == null) {
-			Msg msg = Msg.error();
-			msg.setMsg("您无被要求填写表单");
-			return msg;
+			return Msg.error("您无被要求填写表单");
 		}
 		if (record.getFilled() == true) {
-			Msg msg = Msg.error();
-			msg.setMsg("您已经填过该表单了");
-			return msg;
+			return Msg.error("您已经填过该表单了");
 		}
 		record.setFormId(formId);
 		record.setUserId(student.getUserId());

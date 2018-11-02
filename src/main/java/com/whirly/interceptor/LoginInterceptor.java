@@ -49,7 +49,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			request.getRequestDispatcher("/login").forward(request, response);
 			return false;
 		}
-		/*logger.info("user {} visit uri : {}.", loginUser.getUserId(), requestURI);*/
+		logger.info("user {} visit uri  {}.", loginUser.getUserId(), requestURI);
 		return true;
 		// return super.preHandle(request, response, handler);
 	}

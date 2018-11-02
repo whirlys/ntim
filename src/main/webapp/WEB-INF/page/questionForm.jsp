@@ -29,7 +29,7 @@
 		<div class="layui-form-item" pane="">
 			<label class="layui-form-label">是否匿名</label>
 			<div class="layui-input-block">
-				<input type="checkbox"  name="isActive" lay-skin="switch"
+				<input type="checkbox" name="isActive" lay-skin="switch"
 					title="是否匿名" lay-text="是|否">
 			</div>
 		</div>
@@ -74,7 +74,6 @@
 				} else {
 					fields["anonymous"] = false;
 				}
-				alert(JSON.stringify(fields))
 
 				$.ajax({
 					url : "${ctx }/question/addQuestion",
@@ -84,7 +83,7 @@
 					contentType : 'application/json',
 					traditional : true,
 					success : function(data) {
-						if (data['code'] == 100) {
+						if (data['code'] == "100") {
 							layer.closeAll("iframe");
 							//刷新父页面
 							parent.location.reload();

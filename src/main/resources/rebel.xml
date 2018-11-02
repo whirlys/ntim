@@ -13,6 +13,11 @@
 
 	<web>
 		<link target="/">
+			<dir name="D:/eclipse-workstation/ntim/target/m2e-wtp/web-resources">
+				<exclude name="/"/>
+			</dir>
+		</link>
+		<link target="/">
 			<dir name="D:/eclipse-workstation/ntim/src/main/webapp">
 			</dir>
 		</link>

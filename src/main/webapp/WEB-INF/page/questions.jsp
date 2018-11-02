@@ -53,7 +53,7 @@
 	</blockquote>
 
 	<table class="layui-table"
-		lay-data="{height:515, url:'${ctx }/question/list', page:true, id:'list-table'}"
+		lay-data="{height:450, url:'${ctx }/question/list', page:true, id:'list-table'}"
 		lay-filter="list">
 		<thead>
 			<tr>

@@ -90,7 +90,23 @@
 			app.set({
 				type : 'iframe'
 			}).init();
+			//发送消息
+			var sendMsg = function(msg, receiver, group) {
+				var message = new proto.Model();
+				var content = new proto.MessageBody();
 
+				message.setMsgtype(4);
+				message.setCmd(5);
+				message.setGroupid(group);//系统用户组
+				message.setToken(currentsession);
+				message.setSender(currentsession);
+				message.setReceiver(receiver);//好友ID
+				content.setContent(msg);
+				content.setType(0)
+				message.setContent(content.serializeBinary())
+
+				socket.send(message.serializeBinary());
+			}
 			//基础配置
 			layim.config({
 				title : "我的LayIM",
