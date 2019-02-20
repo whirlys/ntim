@@ -1,6 +1,6 @@
 ## 大学消息通知系统服务端的设计与实现
 
-个人完成的**不成熟**的学生课程设计作品，仅供参考，Netty聊天部分主要修改自  [qiqiim-server](https://gitee.com/qiqiim/qiqiim-server)
+学生课程设计作品，仅供参考，Netty聊天部分主要修改自  [qiqiim-server](https://gitee.com/qiqiim/qiqiim-server)
 
 （题目源于自己一个想改善大学消息通知效率的一个想法，所有功能都是自己DIY的，也许并不可行）
 
