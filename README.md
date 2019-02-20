@@ -5,7 +5,7 @@
 （题目源于自己一个想改善大学消息通知效率的一个想法，所有功能都是自己DIY的，也许并不可行）
 
 #### 技术栈
-SSM、Netty、FastDFS、Mysql、Redis、Layui + Layim
+SSM、Netty、FastDFS、Mysql、Redis、Layui + Layim、ELK
 
 ![img](http://image.laijianfeng.org/20181102_225245.png)
 
